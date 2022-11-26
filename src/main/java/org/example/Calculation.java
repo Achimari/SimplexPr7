@@ -1,13 +1,12 @@
 package org.example;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+import java.util.Objects;
 
 public class Calculation {
 
-    private int rows, cols;
+    private final int rows, cols;
 
     public Calculation(int rows, int cols) {
         this.rows = rows;
@@ -55,7 +54,7 @@ public class Calculation {
         return location;
     }
 
-    private double findPivotPoint(double[][] matrix) {
+    public double findPivotPoint(double[][] matrix) {
         int columnPivot = findPivotColumnIndex(matrix);
         int rowPivot = findPivotRowIndex(matrix, columnPivot);
         return matrix[rowPivot][columnPivot];
@@ -107,5 +106,39 @@ public class Calculation {
             result = true;
         }
         return result;
+    }
+
+    public String[] getFinalLine(double[][] matrix) {
+
+        String[] result = new String[cols];
+
+        while (!isEnd(matrix)) {
+            result[findPivotColumnIndex(matrix)] = String.valueOf(findPivotRowIndex(matrix, findPivotColumnIndex(matrix)));
+            matrix = makeStep(matrix);
+        }
+
+        for (int i = 0; i < result.length; i++) {
+                if (result[i] == null) {
+                    result[i] = "0";
+
+                } else if (matrix[rows - 1][i] == 0 && calculateSumOfColumn(matrix, i) == 1) {
+                    try {
+                        int temp = Integer.parseInt(result[i]);
+                        result[i] = String.valueOf(matrix[temp][cols - 1]);
+                    } catch (NumberFormatException ignored) {
+                }
+            }
+        }
+
+        result[cols - 1] = String.valueOf(matrix[rows - 1][cols - 1]);
+        return result;
+    }
+
+    private double calculateSumOfColumn(double[][] matrix, int index) {
+        double sum = 0;
+        for (int i = 0; i < rows; i++) {
+                sum += matrix[i][index];
+        }
+        return sum;
     }
 }

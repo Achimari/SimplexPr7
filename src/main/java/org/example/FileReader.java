@@ -28,23 +28,22 @@ public class FileReader {
 
         for (int row = 0; scanner.hasNextLine() && row < rowSize; row++) {
             String[] values = scanner.nextLine().split("\\s+");
-            for (int i = 0; i < columnSize && i < values.length; i++) {
+            if (row > 1  && row < rowSize - 2) {
+                countOfS++;
+            }
+            for (String value : values) {
                 if (row == 0) {
-                    valuesC.add(values[i]);
+                    valuesC.add(value);
                 } else if (row == rowSize - 1) {
-                    valuesB.add(values[i]);
+                    valuesB.add(value);
                 } else {
-                    valuesS.add(values[i]);
-                    countOfS++;
-
+                    valuesS.add(value);
                 }
             }
         }
 
-        countOfS = countOfS / (rows - 4);
         valuesS.remove(0);
         valuesS.remove(valuesS.size() - 1);
-
         scanner.close();
     }
 
